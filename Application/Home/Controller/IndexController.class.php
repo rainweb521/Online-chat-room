@@ -2,11 +2,17 @@
 namespace Home\Controller;
 use Think\Controller;
 class IndexController extends CommonController {
-
+    protected $over_time = 300;
     public function index(){
+
+//       print_r($_SESSION);
+//        exit();
+        $time = date('U') - $this->over_time;
+        $online_list = D('Online')->get_OnlineList(array('o_state=1 AND o_addtime>'.$time));
         $chat_list = D('Chat')->get_Chat_Num_List(10);
         $flag = D('Chat')->get_ChatNum();
         $user = $_SESSION['User'];
+        $this->assign('online_list',$online_list);
         $this->assign('chat_list',$chat_list);
         $this->assign('flag',$flag);
         $this->assign('user',$user);
@@ -23,7 +29,7 @@ class IndexController extends CommonController {
         $data['c_photo'] = $user['photo'];
         $data['c_addtime'] = date("h:i:sa");
         D('Chat')->add_ChatInfo($data);
-        echo json_encode(array('name'=>'123'));
+        D('Online')->set_OnlineTime($user['o_id']);
     }
 
     public function get_ajax(){
@@ -33,10 +39,23 @@ class IndexController extends CommonController {
             echo json_encode($chat_list);
         }
     }
-    public function set_session(){
-        $user['name'] = 'rain';
-        $user['photo'] = '';
-        session('User',$user);
-        $this->redirect('/index.php?c=index');
+    public function get_onlineuser(){
+        $time = date('U') - $this->over_time;
+        $online_list = D('Online')->get_OnlineList(array('o_state=1 AND o_addtime>'.$time));
+        if ($online_list!=NULL){
+            echo json_encode($online_list);
+        }
     }
+    public function clear_online(){
+        $time = date('U') - 600;
+        D('Online')->Clear_Online($time);
+        echo "<h1>已经清除时长不在线好友</h1>";
+    }
+
+//    public function set_session(){
+//        $user['name'] = 'rain';
+//        $user['photo'] = '';
+//        session('User',$user);
+//        $this->redirect('/index.php?c=index');
+//    }
 }

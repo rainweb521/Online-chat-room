@@ -19,7 +19,7 @@
         <?php echo ($user["name"]); ?><i class="fontico down"></i>
         <ul class="managerbox">
           <!--<li><a href="#"><i class="fontico lock"></i>修改密码</a></li>-->
-          <li><a href="/index.php?c=login&a=logout"><i class="fontico logout"></i>退出登录</a></li>
+          <li><a href="/index.php?c=login&a=logout" onclick=""><i class="fontico logout"></i>退出登录</a></li>
         </ul>
       </div>
     </div>
@@ -61,13 +61,16 @@
         </div>
       </div>
     </div>
-    <div class="chat_right">
-      <ul class="user_list" title="双击用户私聊">
-        <li class="fn-clear selected"><em>所有用户</em></li>
-        <!--<li class="fn-clear" data-id="1"><span><img src="/Public/images/hetu.jpg" width="30" height="30"  alt=""/></span><em>河图</em><small class="online" title="在线"></small></li>-->
+    <!--<button onclick="get_OnlineUser()">online</button>-->
+    <div class="online_userlist" id="online_userlist">
+      <ul class="user_list"  title="点击可刷新用户列表">
+        <li class="fn-clear selected" onclick="get_OnlineUser()"><em>所有用户(点击刷新)</em></li>
+
+        <?php if(is_array($online_list)): $i = 0; $__LIST__ = $online_list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$list): $mod = ($i % 2 );++$i;?><li class="fn-clear" data-id="1"><span><img src="<?php echo ($list["o_photo"]); ?>" width="30" height="30"  alt=""/></span><em><?php echo ($list["o_name"]); ?></em><small class="online" title="在线"></small></li><?php endforeach; endif; else: echo "" ;endif; ?>
         <!--<li class="fn-clear" data-id="2"><span><img src="/Public/images/53f44283a4347.jpg" width="30" height="30"  alt=""/></span><em>猫猫</em><small class="online" title="在线"></small></li>-->
         <!--<li class="fn-clear" data-id="3"><span><img src="/Public/images/53f442834079a.jpg" width="30" height="30"  alt=""/></span><em>白猫</em><small class="offline" title="离线"></small></li>-->
       </ul>
+
     </div>
   </div>
 </div>
@@ -78,6 +81,7 @@
 
 <script type="text/javascript">
     setInterval("get_chatlist()",3000);
+    setInterval("get_OnlineUser()",180000);
 //    function sendMessage2(event){
 //            var e = window.event || event;
 //            var k = e.keyCode || e.which || e.charCode;
@@ -133,12 +137,11 @@ $(document).ready(function(e) {
 });
 function add_chatinfo(){
     var msg = $("#message").val();
-    $.get("/index.php?c=index&a=add_ajax&c_text=" + msg, function(data){
-        var res = eval("(" + data + ")");//转为Object对象
-        var str = res.name;
-
-    });
-    $("#message").val('');
+    if(msg!=''){
+        $.get("/index.php?c=index&a=add_ajax&c_text=" + msg);
+        document.getElementById('message').value = '';
+    }
+//    $("#message").val('');
 }
 function get_chatlist(){
 
@@ -163,9 +166,31 @@ function get_chatlist(){
 }
 function sendMessage(event, from_name, to_uid, to_uname){
     add_chatinfo();
-    get_chatlist();
+//    get_chatlist();
 
 }
+function logout(){
+    $.get("/index.php?c=index&a=add_ajax&c_text=" + msg);
+}
+function get_OnlineUser(){
+    htmlData = '<ul class="user_list"  title="点击可刷新用户列表"><li class="fn-clear selected" onclick="get_OnlineUser()"><em>所有用户(点击刷新)</em></li>';
+    document.getElementById('online_userlist').innerHTML = htmlData + '</ul>';
+    $.get("/index.php?c=index&a=get_onlineuser", function(data){
+        var res = eval("(" + data + ")");//转为Object对象
+//        htmlData = '<ul class="user_list"  title="点击可刷新用户列表"><li class="fn-clear selected" onclick="get_OnlineUser()"><em>所有用户(点击刷新)</em></li>';
+        for (var i=0;i<res.length;i++){
+            htmlData = htmlData + '<li class="fn-clear" data-id="1"><span>'
+                + '   <img src='+ res[i].o_photo +' width="30" height="30"  alt=""/></span><em>'+res[i].o_name
+                + '   </em><small class="online" title="在线"></small></li>';
+        }
+        htmlData = htmlData + '</ul>';
+        document.getElementById('online_userlist').innerHTML = htmlData;
+    });
+}
+
+//    window.onbeforeunload = function(){
+//        $.get("/index.php?c=login&a=logout");
+//    }
 </script>
 </body>
 </html>

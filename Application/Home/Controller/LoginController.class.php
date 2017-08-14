@@ -19,6 +19,8 @@ class LoginController extends Controller{
         $user['name'] = $username;
         $num = rand(1,24);
         $user['photo'] = 'http://cos.rain1024.com/blog/more/chat_photo/'.$num.'.jpg';
+        $user['time'] = date("U");
+        $user['o_id'] = D('Online')->add_OnlineInfo($user);
         session('User',$user);
         $this->redirect('/index.php?c=index');
     }
@@ -27,6 +29,10 @@ class LoginController extends Controller{
      * 登出操作
      */
     public function logout() {
+//        Session::set();
+        $user = $_SESSION['User'];
+        $o_id = $user['o_id'];
+        D('Online')->set_OnlineState($o_id);
         session('User', null);
         $this->redirect('/index.php?c=index');
         exit();

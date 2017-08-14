@@ -8,7 +8,7 @@ return array(
 //    'DB_USER' => 'chat',
 //    'DB_PWD' => 'GEwwTDJmwb',
     'DB_PORT' => 3306,
-    'DB_NAME' => 'test',
+    'DB_NAME' => 'chat',
     'DB_CHARSET' => 'utf8',
 //    'DB_PREFIX' =>'rain_',
 );
