@@ -9,10 +9,20 @@
 <script type="text/javascript" src="/Public/js/jquery.min.js"></script>
 </head>
 
+<style>
+.header{
+
+  font-size: 36px;
+  text-align: center;
+  color: aqua;
+}
+</style>
 <body>
 <div class="chatbox">
   <div class="chat_top fn-clear">
-    <div class="logo"><img src="/Public/images/logo.png" width="190" height="60"  alt=""/></div>
+    <div class="logo"><img src="/Public/images/logo.png" width="200" height="60"  alt=""/></div>
+
+<span class="header">（测试版）</span>
     <div class="uinfo fn-clear">
       <div class="uface"><img src="{$user.photo}" width="40" height="40"  alt=""/></div>
       <div class="uname">
@@ -170,6 +180,7 @@ function get_chatlist(){
 }
 function sendMessage(event, from_name, to_uid, to_uname){
     add_chatinfo();
+    get_OnlineUser();
 //    get_chatlist();
 
 }

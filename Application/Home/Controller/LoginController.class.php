@@ -15,7 +15,7 @@ class LoginController extends Controller{
     }
 
     public function login(){
-        $username = request('post','str','username','admin');
+        $username = request('post','str','username','sb');
         $user['name'] = $username;
         $num = rand(1,24);
         $user['photo'] = 'http://cos.rain1024.com/blog/more/chat_photo/'.$num.'.jpg';

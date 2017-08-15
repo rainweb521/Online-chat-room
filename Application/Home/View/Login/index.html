@@ -57,14 +57,14 @@
 					<h1><span class="log-in">登录</span> or <span class="sign-up">注册</span></h1>
 					<p class="float">
 						<label for="login"><i class="icon-user"></i>用户名</label>
-						<input type="text" name="username" placeholder="输入用户名">
+						<input type="text" name="username" placeholder="不输入用户名的是sb">
 					</p>
 					<p class="float">
 						<label for="password"><i class="icon-lock"></i>密码</label>
-						<input type="password" name="password" placeholder="输入密码" class="showpassword">
+						<input type="password" name="password" placeholder="不用输入密码" class="showpassword" disabled>
 					</p>
 					<p class="clearfix"> 
-						<button type="submit" class="log-twitter">注册</button>
+						<button type="submit" class="log-twitter" disabled>注册</button>
 						<input type="submit" name="submit" value="登录">
 					</p>
 				</form>​​
